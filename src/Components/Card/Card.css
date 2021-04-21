@@ -1,0 +1,11 @@
+.Card {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+  height: 90%;
+  width: 33%;
+  max-width: 150px;
+  min-width: calc(320px / 3);
+
+  margin: 0 0.5rem;
+  padding: 5px;
+}

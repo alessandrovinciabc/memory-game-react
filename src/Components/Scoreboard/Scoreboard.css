@@ -1,0 +1,22 @@
+.Scoreboard {
+  height: 30vh;
+  width: 90%;
+  max-width: 450px;
+  min-width: 300px;
+  border-radius: 8px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 2rem;
+
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+  margin-bottom: 2rem;
+}
+
+.Score {
+  margin-bottom: 5px;
+}
