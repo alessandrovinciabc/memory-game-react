@@ -100,6 +100,17 @@ function App() {
     });
   }, []);
 
+  useEffect(() => {
+    let savedHighscore = localStorage.highscore;
+    if (savedHighscore) {
+      setBest(savedHighscore);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.highscore = best;
+  }, [best]);
+
   function shuffleUntilOneUnclicked() {
     setCardImages((cards) => {
       let copy = JSON.parse(JSON.stringify(cards));
@@ -139,6 +150,11 @@ function App() {
       });
       return score + 1;
     });
+  }
+
+  function clearScore() {
+    setScore(0);
+    setBest(0);
   }
 
   function gameOver() {
@@ -190,7 +206,9 @@ function App() {
       <div className="Game">
         {loading ? <span className="loading">Loading...</span> : displayCards()}
       </div>
-      <button className="Button--reset">Clear Highscore</button>
+      <button className="Button--reset" onClick={clearScore}>
+        Clear score
+      </button>
     </div>
   );
 }
