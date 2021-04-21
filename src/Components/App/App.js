@@ -75,6 +75,17 @@ function App() {
     });
   }
 
+  function resetClickStatus() {
+    setCardImages((prev) => {
+      return prev.map((el) => {
+        let copy = el;
+        copy.clicked = false;
+
+        return copy;
+      });
+    });
+  }
+
   useEffect(() => {
     getImages(N_OF_CARDS).then((newImages) => {
       let arrayOfCardObjects = newImages.map((image) => {
@@ -95,6 +106,7 @@ function App() {
 
       if (prev[correspondingCardIndex].clicked) {
         setScore(0);
+        resetClickStatus();
         return prev; //gameover
       }
 
