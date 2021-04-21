@@ -30,3 +30,7 @@
 .Button--reset {
   padding: 1.2rem;
 }
+
+.loading {
+  font-size: 1.5rem;
+}

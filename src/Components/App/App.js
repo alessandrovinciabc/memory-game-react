@@ -50,10 +50,40 @@ let getImages = async (n) => {
 
 function App() {
   const N_OF_CARDS = 10;
+  const N_OF_CARDS_SHOWN = 3;
   let [score, setScore] = useState(0);
   let [best, setBest] = useState(0);
+
+  // eslint-disable-next-line no-unused-vars
   let [cardImages, setCardImages] = useState(Array(N_OF_CARDS).fill({}));
-  let [currentCards, setCurrentCards] = useState(Array(3).fill({}));
+  let [currentCards, setCurrentCards] = useState(
+    Array(N_OF_CARDS_SHOWN).fill({})
+  );
+  let [loading, setLoading] = useState(true);
+
+  async function cacheImages(arr) {
+    let promises = [];
+    arr.forEach((el) => {
+      let newPromise = new Promise((resolve, reject) => {
+        let img = new Image();
+        img.src = el.src;
+        img.onload = resolve(true);
+        img.onerror = reject('error loading image');
+      });
+      promises.push(newPromise);
+    });
+
+    try {
+      await Promise.all(promises);
+    } catch (error) {
+      throw new Error(error);
+    }
+
+    //Add a little bit of delay to ensure the images are fully loaded
+    setTimeout(() => {
+      setLoading(false);
+    }, 500);
+  }
 
   useEffect(() => {
     getImages(N_OF_CARDS).then((newImages) => {
@@ -64,6 +94,7 @@ function App() {
           clicked: false,
         };
       });
+      cacheImages(arrayOfCardObjects);
       setCardImages(arrayOfCardObjects);
       shuffleUntilOneUnclicked();
     });
@@ -135,13 +166,13 @@ function App() {
     shuffleUntilOneUnclicked();
   }
 
-  return (
-    <div className="App">
-      <Scoreboard score={score} best={best} />
-      <div className="Game">
+  function displayCards() {
+    return (
+      <React.Fragment>
         {currentCards.map((card) => {
           return (
             <Card
+              key={card.id}
               img={card.src}
               onClick={(e) => {
                 onCardClick(e, card.id);
@@ -149,6 +180,15 @@ function App() {
             />
           );
         })}
+      </React.Fragment>
+    );
+  }
+
+  return (
+    <div className="App">
+      <Scoreboard score={score} best={best} />
+      <div className="Game">
+        {loading ? <span className="loading">Loading...</span> : displayCards()}
       </div>
       <button className="Button--reset">Clear Highscore</button>
     </div>
