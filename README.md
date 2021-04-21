@@ -4,7 +4,7 @@
 
 Simple game where you are shown images you have to click. If you click an image you had previously clicked already, you lose. The more cards you click without failing, the higher your score.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[Live Preview](https://alessandrovinciabc.github.io/memory-game-react/)
 
 ## Goals
 
