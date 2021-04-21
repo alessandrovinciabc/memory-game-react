@@ -5,6 +5,30 @@ import './App.css';
 import Scoreboard from '../Scoreboard/Scoreboard.js';
 import Card from '../Card/Card.js';
 
+import { v4 as uuidv4 } from 'uuid';
+
+let getRandomNumber = (min, max) => {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1) + min);
+};
+
+let shuffleArray = (arr) => {
+  for (let i = 0; i < arr.length; ++i) {
+    let firstIndex, secondIndex;
+    let temp;
+
+    firstIndex = getRandomNumber(0, arr.length - 1);
+    secondIndex = getRandomNumber(0, arr.length - 1);
+
+    temp = arr[firstIndex];
+    arr[firstIndex] = arr[secondIndex];
+    arr[secondIndex] = temp;
+  }
+
+  return arr;
+};
+
 let getImages = async (n) => {
   let images = [];
 
@@ -31,61 +55,80 @@ function App() {
   let [cardImages, setCardImages] = useState(Array(N_OF_CARDS).fill({}));
   let [currentCards, setCurrentCards] = useState(Array(3).fill({}));
 
+  function shuffleUntilOneUnclicked() {
+    setCardImages((cards) => {
+      let copy = JSON.parse(JSON.stringify(cards));
+
+      let newCurrent;
+      let atLeastOneUnclickedCard = false;
+      while (!atLeastOneUnclickedCard) {
+        shuffleArray(copy);
+        newCurrent = copy.slice(0, 3);
+
+        if (newCurrent.filter((card) => !card.clicked))
+          atLeastOneUnclickedCard = true;
+      }
+
+      setCurrentCards(newCurrent);
+
+      return cards;
+    });
+  }
+
   useEffect(() => {
     getImages(N_OF_CARDS).then((newImages) => {
       let arrayOfCardObjects = newImages.map((image) => {
         return {
+          id: uuidv4(),
           src: image,
           clicked: false,
         };
       });
       setCardImages(arrayOfCardObjects);
+      shuffleUntilOneUnclicked();
     });
   }, []);
 
-  function onCardClick(e, index) {
+  function onCardClick(e, id) {
     setCardImages((prev) => {
-      if (prev[index].clicked) {
+      let correspondingCardIndex = prev.findIndex((el) => el.id === id);
+
+      if (prev[correspondingCardIndex].clicked) {
         setScore(0);
         return prev; //gameover
       }
 
       let copy = JSON.parse(JSON.stringify(prev));
-      copy[index].clicked = true;
+      copy[correspondingCardIndex].clicked = true;
 
       setScore((score) => {
         setBest((best) => {
           if (score + 1 > best) return score + 1;
+          return best;
         });
         return score + 1;
       });
 
       return copy;
     });
+
+    shuffleUntilOneUnclicked();
   }
 
   return (
     <div className="App">
       <Scoreboard score={score} best={best} />
       <div className="Game">
-        <Card
-          img={cardImages[0].src}
-          onClick={(e) => {
-            onCardClick(e, 0);
-          }}
-        />
-        <Card
-          img={cardImages[1].src}
-          onClick={(e) => {
-            onCardClick(e, 1);
-          }}
-        />
-        <Card
-          img={cardImages[2].src}
-          onClick={(e) => {
-            onCardClick(e, 2);
-          }}
-        />
+        {currentCards.map((card) => {
+          return (
+            <Card
+              img={card.src}
+              onClick={(e) => {
+                onCardClick(e, card.id);
+              }}
+            />
+          );
+        })}
       </div>
       <button className="Button--reset">Clear Highscore</button>
     </div>
