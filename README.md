@@ -11,6 +11,12 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 - Practice with React Hooks, both on the state and lifecycle
 - Use fetch calls to an API for the images to display
 
+## Screenshot
+
+[![Screenshot-2021-04-21-Memory-Game-1.png](https://i.postimg.cc/Nfv63tTt/Screenshot-2021-04-21-Memory-Game-1.png)](https://postimg.cc/5jpQzZnK)
+
+[![Screenshot-2021-04-21-Memory-Game-2.png](https://i.postimg.cc/66vVbq8z/Screenshot-2021-04-21-Memory-Game-2.png)](https://postimg.cc/xq9bc0yb)
+
 ## How to run
 
 In the project directory, you can run:
