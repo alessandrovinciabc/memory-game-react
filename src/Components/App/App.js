@@ -55,6 +55,20 @@ function App() {
   let [cardImages, setCardImages] = useState(Array(N_OF_CARDS).fill({}));
   let [currentCards, setCurrentCards] = useState(Array(3).fill({}));
 
+  useEffect(() => {
+    getImages(N_OF_CARDS).then((newImages) => {
+      let arrayOfCardObjects = newImages.map((image) => {
+        return {
+          id: uuidv4(),
+          src: image,
+          clicked: false,
+        };
+      });
+      setCardImages(arrayOfCardObjects);
+      shuffleUntilOneUnclicked();
+    });
+  }, []);
+
   function shuffleUntilOneUnclicked() {
     setCardImages((cards) => {
       let copy = JSON.parse(JSON.stringify(cards));
@@ -86,40 +100,34 @@ function App() {
     });
   }
 
-  useEffect(() => {
-    getImages(N_OF_CARDS).then((newImages) => {
-      let arrayOfCardObjects = newImages.map((image) => {
-        return {
-          id: uuidv4(),
-          src: image,
-          clicked: false,
-        };
+  function updateScore() {
+    setScore((score) => {
+      setBest((best) => {
+        if (score + 1 > best) return score + 1;
+        return best;
       });
-      setCardImages(arrayOfCardObjects);
-      shuffleUntilOneUnclicked();
+      return score + 1;
     });
-  }, []);
+  }
+
+  function gameOver() {
+    setScore(0);
+    resetClickStatus();
+  }
 
   function onCardClick(e, id) {
     setCardImages((prev) => {
       let correspondingCardIndex = prev.findIndex((el) => el.id === id);
 
       if (prev[correspondingCardIndex].clicked) {
-        setScore(0);
-        resetClickStatus();
-        return prev; //gameover
+        gameOver();
+        return prev;
       }
+
+      updateScore();
 
       let copy = JSON.parse(JSON.stringify(prev));
       copy[correspondingCardIndex].clicked = true;
-
-      setScore((score) => {
-        setBest((best) => {
-          if (score + 1 > best) return score + 1;
-          return best;
-        });
-        return score + 1;
-      });
 
       return copy;
     });
