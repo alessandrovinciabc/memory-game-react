@@ -54,6 +54,7 @@ function App() {
   let [score, setScore] = useState(0);
   let [best, setBest] = useState(0);
   let [hasWon, setHasWon] = useState(false);
+  let [hasRestarted, setHasRestarted] = useState(true);
 
   // eslint-disable-next-line no-unused-vars
   let [cardImages, setCardImages] = useState(Array(N_OF_CARDS).fill({}));
@@ -84,6 +85,9 @@ function App() {
   }
 
   useEffect(() => {
+    if (!hasRestarted) return;
+    setLoading(true);
+
     getImages(N_OF_CARDS).then((newImages) => {
       let arrayOfCardObjects = newImages.map((image) => {
         return {
@@ -96,7 +100,8 @@ function App() {
       setCardImages(arrayOfCardObjects);
       shuffleUntilOneUnclicked();
     });
-  }, []);
+    setHasRestarted(false);
+  }, [hasRestarted]);
 
   useEffect(() => {
     let savedHighscore = localStorage.highscore;
@@ -213,7 +218,15 @@ function App() {
         <button className="Button--reset" onClick={clearScore}>
           Clear score
         </button>
-        <button className="Button--reset">Restart</button>
+        <button
+          className="Button--reset"
+          onClick={() => {
+            setHasRestarted(true);
+            setScore(0);
+          }}
+        >
+          Restart
+        </button>
       </div>
     </div>
   );
