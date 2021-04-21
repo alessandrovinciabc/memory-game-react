@@ -53,6 +53,7 @@ function App() {
   const N_OF_CARDS_SHOWN = 3;
   let [score, setScore] = useState(0);
   let [best, setBest] = useState(0);
+  let [hasWon, setHasWon] = useState(false);
 
   // eslint-disable-next-line no-unused-vars
   let [cardImages, setCardImages] = useState(Array(N_OF_CARDS).fill({}));
@@ -79,10 +80,7 @@ function App() {
       throw new Error(error);
     }
 
-    //Add a little bit of delay to ensure the images are fully loaded
-    setTimeout(() => {
-      setLoading(false);
-    }, 500);
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -148,6 +146,7 @@ function App() {
         if (score + 1 > best) return score + 1;
         return best;
       });
+      if (score + 1 === N_OF_CARDS) setHasWon(true);
       return score + 1;
     });
   }
@@ -190,9 +189,13 @@ function App() {
             <Card
               key={card.id}
               img={card.src}
-              onClick={(e) => {
-                onCardClick(e, card.id);
-              }}
+              onClick={
+                !hasWon
+                  ? (e) => {
+                      onCardClick(e, card.id);
+                    }
+                  : null
+              }
             />
           );
         })}
@@ -202,13 +205,16 @@ function App() {
 
   return (
     <div className="App">
-      <Scoreboard score={score} best={best} />
+      <Scoreboard score={score} best={best} hasWon={hasWon} />
       <div className="Game">
         {loading ? <span className="loading">Loading...</span> : displayCards()}
       </div>
-      <button className="Button--reset" onClick={clearScore}>
-        Clear score
-      </button>
+      <div>
+        <button className="Button--reset" onClick={clearScore}>
+          Clear score
+        </button>
+        <button className="Button--reset">Restart</button>
+      </div>
     </div>
   );
 }
