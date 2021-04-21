@@ -124,8 +124,8 @@ function App() {
         shuffleArray(copy);
         newCurrent = copy.slice(0, 3);
 
-        if (newCurrent.filter((card) => !card.clicked))
-          atLeastOneUnclickedCard = true;
+        let filtered = newCurrent.filter((card) => !card.clicked);
+        if (filtered.length !== 0) atLeastOneUnclickedCard = true;
       }
 
       setCurrentCards(newCurrent);
@@ -151,7 +151,11 @@ function App() {
         if (score + 1 > best) return score + 1;
         return best;
       });
-      if (score + 1 === N_OF_CARDS) setHasWon(true);
+      if (score + 1 === N_OF_CARDS) {
+        setHasWon(true);
+      } else {
+        shuffleUntilOneUnclicked();
+      }
       return score + 1;
     });
   }
@@ -182,8 +186,6 @@ function App() {
 
       return copy;
     });
-
-    shuffleUntilOneUnclicked();
   }
 
   function displayCards() {
