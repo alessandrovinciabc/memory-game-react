@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
 *,
 *::before,
 *::after {
@@ -14,6 +16,7 @@
   justify-content: center;
 
   height: 100vh;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .Game {
