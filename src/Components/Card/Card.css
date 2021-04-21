@@ -8,6 +8,16 @@
 
   margin: 0 0.5rem;
   padding: 5px;
+
+  cursor: pointer;
+
+  transition: transform 0.2s ease-out;
+
+  border-radius: 2px;
+}
+
+.Card:hover {
+  transform: scale(1.1);
 }
 
 .Card__image {

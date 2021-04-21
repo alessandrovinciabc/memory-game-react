@@ -4,8 +4,8 @@ import './Card.css';
 
 function Card(props) {
   return (
-    <div className="Card">
-      <img className="Card__image" src={props.img} alt="" />
+    <div className="Card" onClick={props.onClick}>
+      <img draggable="false" className="Card__image" src={props.img} alt="" />
     </div>
   );
 }
