@@ -9,3 +9,9 @@
   margin: 0 0.5rem;
   padding: 5px;
 }
+
+.Card__image {
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+}
