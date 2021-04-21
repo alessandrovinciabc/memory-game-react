@@ -230,6 +230,7 @@ function App() {
           className="Button--reset"
           onClick={() => {
             setHasRestarted(true);
+            setHasWon(false);
             setScore(0);
           }}
         >
