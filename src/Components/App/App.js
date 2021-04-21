@@ -215,7 +215,13 @@ function App() {
         {loading ? <span className="loading">Loading...</span> : displayCards()}
       </div>
       <div>
-        <button className="Button--reset" onClick={clearScore}>
+        <button
+          className="Button--reset"
+          onClick={() => {
+            clearScore();
+            resetClickStatus();
+          }}
+        >
           Clear score
         </button>
         <button
